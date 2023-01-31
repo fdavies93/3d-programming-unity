@@ -10,10 +10,14 @@ public class PlayerMove : MonoBehaviour
     public Transform camera;
 
     private Rigidbody rb;
+    private Transform myTransform;
+    private Vector3 initialPos;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        myTransform = GetComponent<Transform>();
+        initialPos = myTransform.position;
     }
 
     // Update is called once per frame
@@ -27,6 +31,11 @@ public class PlayerMove : MonoBehaviour
         // note that this doesn't (yet) account for camera position
         // will need to rotate vector respective to camera y and z to make that work
         // and also adjust camera look
+    }
+
+    public void Reset() {
+        myTransform.position = initialPos;
+        rb.velocity = Vector3.zero;
     }
 
     public void OnEnable(){
