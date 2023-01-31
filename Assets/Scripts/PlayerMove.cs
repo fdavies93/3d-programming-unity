@@ -23,10 +23,13 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // read the input values
         Vector2 moveBy = move.ReadValue<Vector2>();
+        // multiply the input by acceleration to reach final forces on x and z axis.
         Vector3 force = new Vector3();
         force.x = moveBy.x * acceleration;
         force.z = moveBy.y * acceleration;
+        // apply force to the object
         rb.AddForce(force);
         // note that this doesn't (yet) account for camera position
         // will need to rotate vector respective to camera y and z to make that work
@@ -34,6 +37,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     public void Reset() {
+        // 
         myTransform.position = initialPos;
         rb.velocity = Vector3.zero;
     }
