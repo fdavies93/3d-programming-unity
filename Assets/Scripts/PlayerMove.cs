@@ -27,8 +27,12 @@ public class PlayerMove : MonoBehaviour
         Vector2 moveBy = move.ReadValue<Vector2>();
         // multiply the input by acceleration to reach final forces on x and z axis.
         Vector3 force = new Vector3();
-        force.x = moveBy.x * acceleration;
-        force.z = moveBy.y * acceleration;
+        float rotateBy = 0.0f;
+        // apply rotation using camera - applied to 2d move vector to simplify math
+        if (camera != null) rotateBy = Mathf.Deg2Rad * camera.transform.localEulerAngles.y;
+        Debug.Log(rotateBy);
+        force.x = ((moveBy.x * Mathf.Cos(rotateBy)) - (moveBy.y * Mathf.Sin(rotateBy))) * acceleration;
+        force.z = ((moveBy.y * Mathf.Cos(rotateBy)) + (moveBy.x * Mathf.Sin(rotateBy))) * acceleration;
         // apply force to the object
         rb.AddForce(force);
         // note that this doesn't (yet) account for camera position
@@ -37,7 +41,6 @@ public class PlayerMove : MonoBehaviour
     }
 
     public void Reset() {
-        // 
         myTransform.position = initialPos;
         rb.velocity = Vector3.zero;
     }
