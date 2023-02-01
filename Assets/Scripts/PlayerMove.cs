@@ -29,12 +29,12 @@ public class PlayerMove : MonoBehaviour
         Vector3 forward = camera.transform.forward;
         Vector3 right = camera.transform.right;
         // apply right and forward vectors based on input, adjusting based on acceleration
-        Vector3 force = ((moveBy.x * right) + (moveBy.y * forward)).normalized * acceleration;
+        Vector3 force = ((moveBy.x * right) + (moveBy.y * forward));
+        force.y = 0;
+        force = force.normalized * acceleration;
         // apply force to the object
         rb.AddForce(force);
-        // note that this doesn't (yet) account for camera position
-        // will need to rotate vector respective to camera y and z to make that work
-        // and also adjust camera look
+        // note: this doesn't cancel the Z axis of force
     }
 
     public void Reset() {
