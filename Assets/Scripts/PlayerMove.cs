@@ -25,14 +25,11 @@ public class PlayerMove : MonoBehaviour
     {
         // read the input values
         Vector2 moveBy = move.ReadValue<Vector2>();
-        // multiply the input by acceleration to reach final forces on x and z axis.
-        Vector3 force = new Vector3();
-        float rotateBy = 0.0f;
-        // apply rotation using camera - applied to 2d move vector to simplify math
-        if (camera != null) rotateBy = Mathf.Deg2Rad * camera.transform.localEulerAngles.y;
-        Debug.Log(rotateBy);
-        force.x = ((moveBy.x * Mathf.Cos(rotateBy)) - (moveBy.y * Mathf.Sin(rotateBy))) * acceleration;
-        force.z = ((moveBy.y * Mathf.Cos(rotateBy)) + (moveBy.x * Mathf.Sin(rotateBy))) * acceleration;
+        // get forward and right vectors - these need to be applied separately to adjust for controls
+        Vector3 forward = camera.transform.forward;
+        Vector3 right = camera.transform.right;
+        // apply right and forward vectors based on input, adjusting based on acceleration
+        Vector3 force = ((moveBy.x * right) + (moveBy.y * forward)).normalized * acceleration;
         // apply force to the object
         rb.AddForce(force);
         // note that this doesn't (yet) account for camera position
